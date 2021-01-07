@@ -11,16 +11,17 @@ class CreateSrsMutation(relay.ClientIDMutation):
         id = graphene.ID()
         age_year = graphene.Int()
         age_month = graphene.Int()
+        date = graphene.Date()
         r_name = graphene.String()
 
     @classmethod
-    def mutate_and_get_payload(cls, root, info, age_year, age_month, r_name, id):
+    def mutate_and_get_payload(cls, root, info, age_year, age_month, r_name, id, date):
+        login_user = info.context.user
         std_obj = students.objects.get(pk=from_global_id(id)[1])
-        if srs.objects.filter(childs_name=std_obj).exists():
 
-            obj = srs(childs_name=std_obj, childs_age_month=age_month,
-                      childs_age_year=age_year, raters_name=r_name)
-            obj.save()
+        obj = srs(childs_name=std_obj, childs_age_month=age_month,
+                  childs_age_year=age_year, raters_name=r_name, date_of_rating=date, created_by=login_user)
+        obj.save()
         return CreateSrsMutation(srsfield=obj)
 
 

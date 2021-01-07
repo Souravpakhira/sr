@@ -8,14 +8,14 @@ from .mutations import CreateRawScoreMutation, CreateSrsMutation, UpdateRawScore
 
 
 class Query(graphene.ObjectType):
-    srs_by_student = graphene.Field(SrsTypes, id=graphene.ID(required=True))
+    srs_by_student = graphene.List(SrsTypes, id=graphene.ID(required=True))
     all_students = DjangoFilterConnectionField(StudentsTypes)
     all_srsreport = DjangoFilterConnectionField(SrsTypes)
 
     def resolve_srs_by_student(root, info, id):
         obj = students.objects.get(id=from_global_id(id)[1])
         if srs.objects.filter(childs_name=obj).exists():
-            return srs.objects.get(childs_name=obj)
+            return srs.objects.filter(childs_name=obj)
         else:
             return None
 
