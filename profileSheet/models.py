@@ -1,8 +1,10 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 
+# Replica of autual student model
+# This Model will not come in the actual project
 class students(models.Model):
     gender_choices = (
         ('M', 'Male'),
@@ -21,7 +23,10 @@ class srs(models.Model):
     childs_age_month = models.IntegerField()
     childs_age_year = models.IntegerField()
     raters_name = models.CharField(max_length=250)
-    date_of_rating = models.DateTimeField(auto_now_add=True)
+    date_of_rating = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(
+        User, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.childs_name.name

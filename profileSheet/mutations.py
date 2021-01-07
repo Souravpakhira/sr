@@ -17,9 +17,7 @@ class CreateSrsMutation(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, root, info, age_year, age_month, r_name, id):
         std_obj = students.objects.get(pk=from_global_id(id)[1])
         if srs.objects.filter(childs_name=std_obj).exists():
-            raise GraphQLError(
-                "Report already exist for the following student")
-        else:
+
             obj = srs(childs_name=std_obj, childs_age_month=age_month,
                       childs_age_year=age_year, raters_name=r_name)
             obj.save()
